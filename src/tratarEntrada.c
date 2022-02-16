@@ -1,3 +1,5 @@
+#include "estruturas.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,26 +9,40 @@
 #define RED "\e[0;31m"
 #define NC "\e[0m"
 
+tComando *construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar){
+    tComando *comando = (tComando *)malloc(sizeof(tComando));
+
+    strcpy(comando->entrada, entrada);
+    strcpy(comando->saida, saida);
+    comando->angulo = angulo;
+    comando->limiar = limiar;
+    comando->mascara = mascara;
+
+    return comando; 
+}
+
 int valorEhValido(int type, char* recebido){
     int i;
+
+    // checa se o valor recebido eh um inteiro
     if (type == 0){
         for (i=0;i<strlen(recebido);i++)
             if (!isdigit(recebido[i])){
                 fprintf(stderr, RED "[ERROR]"
                     NC  ": Flag recebida é inválida %s \n"
-                        "Você deve fornecer as flags como dígitos\n",recebido);
+                        "Você deve fornecer as flags com dígitos\n",recebido);
                 exit(EXIT_FAILURE);
             }
-
     }
 
     return 1; 
-}   
+}
 
-int main(int argc, char **argv){
-    char saida[BUFSIZ];
-    char entrada[BUFSIZ];
+tComando *tratamentoEntrada(int argc, char **argv){
+    char saida[100];
+    char entrada[100];
     int i;
+    
     // flags com valores default
     unsigned int mascara = 3; 
     float limiar = 1.5; 
@@ -57,5 +73,7 @@ int main(int argc, char **argv){
         }
     }
 
-    return 0;
+    tComando *comando = construaComando(entrada, saida,mascara, angulo, limiar);
+
+    return comando;
 }
