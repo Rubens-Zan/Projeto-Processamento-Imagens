@@ -1,4 +1,4 @@
-#ifndef _ESTRUTRAS_H_
+#ifndef _ESTRUTURAS_H_
 #define _ESTRUTURAS_H_
 
 typedef struct tComando {
@@ -9,11 +9,11 @@ typedef struct tComando {
     char entrada[100];
 } tComando;
 
-typedef struct imagemPGM {
-    int linha;
-    int coluna;
+typedef struct tImagemPGM {
+    int linhas;
+    int colunas;
     int max_cinza;
     int **matriz;
-} imagemPGM; 
+} tImagemPGM; 
 
 #endif
