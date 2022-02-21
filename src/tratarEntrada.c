@@ -12,8 +12,12 @@
 tComando *construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar){
     tComando *comando = (tComando *)malloc(sizeof(tComando));
 
-    strcpy(comando->entrada, entrada);
-    strcpy(comando->saida, saida);
+    if (strlen(entrada) > 1){
+        strcpy(comando->entrada, entrada);
+    }
+    if (strlen(saida) > 1){
+        strcpy(comando->saida, saida);
+    }
     comando->angulo = angulo;
     comando->limiar = limiar;
     comando->mascara = mascara;
@@ -73,7 +77,6 @@ tComando *tratamentoEntrada(int argc, char **argv){
         }
     }
 
-    tComando *comando = construaComando(entrada, saida,mascara, angulo, limiar);
-
+    tComando *comando = construaComando(entrada,saida,mascara,angulo,limiar);
     return comando;
 }
