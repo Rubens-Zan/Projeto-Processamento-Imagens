@@ -8,24 +8,18 @@
 #define RED "\e[0;31m"
 #define NC "\e[0m"
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Function to ignore any comments
-// in file
+
 void proxLinhaDescomentada(FILE* fp)
 {
 	int ch;
 	char line[100];
 
-	// Ignore any blank lines
+	// Ignorando linhas nao relevantes
 	while ((ch = fgetc(fp)) != EOF && isspace(ch));
-
-	// Recursively ignore comments
-	// in a PGM image commented lines
-	// start with a '#'
 	if (ch == '#') {
 		fgets(line, sizeof(line), fp);
 		proxLinhaDescomentada(fp);
@@ -34,6 +28,11 @@ void proxLinhaDescomentada(FILE* fp)
 		fseek(fp, -1, SEEK_CUR);
 }
 
+void copiarProxLinhaValida(FILE *fp, char *dest){
+	char info[15];
+    proxLinhaDescomentada(fp);
+	fscanf(fp, "%s",dest);
+}
 
 tImagemPGM *tratarImagem(FILE *fp)
 {
@@ -44,21 +43,27 @@ tImagemPGM *tratarImagem(FILE *fp)
     char tipo[5];
     char colunas[4];
     char linhas[5]; 
+    char maxCinza[4];
 
 	proxLinhaDescomentada(fp);
 	fscanf(fp, "%s",tipo);
 
     proxLinhaDescomentada(fp);
 	// Read the image dimensions
-	fscanf(fp, "%s %s",colunas,linhas);
+	fscanf(fp, "%s",colunas);
+	fscanf(fp, "%s",linhas);
 
+    proxLinhaDescomentada(fp);
+	fscanf(fp, "%s", maxCinza);
+    proxLinhaDescomentada(fp);
 
-    printf("tipo : %s", tipo); 
-    printf("colunas  e linhas : %s %s", colunas,linhas); 
+    printf("tipo : %s\n", tipo); 
+    printf("colunas  e linhas : %s %s\n", colunas,linhas); 
+    printf("max cinza : %s\n", maxCinza); 
 
 }
 
-FILE *tratarImagemPorEntrada(char *entrada)
+FILE *abrirImagem(char *entrada)
 {
     FILE *fp = fopen(entrada, "rb");
 
@@ -69,19 +74,34 @@ FILE *tratarImagemPorEntrada(char *entrada)
                 entrada);
         exit(EXIT_FAILURE);
     }
-    tratarImagem(fp);
+    return fp;
+}
+
+void fecharImagem(FILE *fp){
     fclose(fp);
 }
 
 tImagemPGM *retornarImagemDeEntrada(char *entrada)
 {
+    char tipo[4];
+    char colunas[5];
+    char linhas[5];
     tImagemPGM *imagemRecebida = malloc(sizeof(tImagemPGM));
+    FILE *imagemP;
+    
     if (strlen(entrada) > 1)
     {
-        tratarImagemPorEntrada(entrada);
+        imagemP = abrirImagem(entrada);
     }else{
-        tratarImagem(stdin);
+        imagemP = stdin;
     }
+
+    copiarProxLinhaValida(imagemP, tipo);
+    copiarProxLinhaValida(imagemP, colunas);
+    copiarProxLinhaValida(imagemP, linhas);
+
+    printf(" %s %s %s\n",tipo, colunas, linhas);
+    fecharImagem(imagemP);
 
     //     typedef struct tImagemPGM {
     //           int linhas;
@@ -93,5 +113,7 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada)
     // tImagemPGM = imagem;
 
     // return imagemLida;
+
+
     return imagemRecebida;
 }

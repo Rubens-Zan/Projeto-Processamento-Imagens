@@ -71,9 +71,7 @@ bool openPGM(PGMImage* pgm,
 	ignoreComments(pgmfile);
 
 	// Read the image dimensions
-	fscanf(pgmfile, "%d %d",
-		&(pgm->width),
-		&(pgm->height));
+	fscanf(pgmfile, "%d %d",&(pgm->width),&(pgm->height));
 
 	ignoreComments(pgmfile);
 
@@ -95,9 +93,7 @@ bool openPGM(PGMImage* pgm,
 
 		for (int i = 0;
 			i < pgm->height; i++) {
-			pgm->data[i]
-				= malloc(pgm->width
-						* sizeof(unsigned char));
+			pgm->data[i]= malloc(pgm->width* sizeof(unsigned char));
 
 			// If memory allocation
 			// is failed
