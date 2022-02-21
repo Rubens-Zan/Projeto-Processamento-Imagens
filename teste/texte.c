@@ -81,9 +81,7 @@ bool openPGM(PGMImage* pgm,
 
 	// Allocating memory to store
 	// img info in defined struct
-	pgm->data
-		= malloc(pgm->height
-				* sizeof(unsigned char*));
+	pgm->data= malloc(pgm->height* sizeof(unsigned char*));
 
 	// Storing the pixel info in
 	// the struct
@@ -105,9 +103,7 @@ bool openPGM(PGMImage* pgm,
 
 			// Read the gray values and
 			// write on allocated memory
-			fread(pgm->data[i],
-				sizeof(unsigned char),
-				pgm->width, pgmfile);
+			fread(pgm->data[i],sizeof(unsigned char),pgm->width, pgmfile);
 		}
 	}
 
@@ -152,8 +148,7 @@ void printImageDetails(PGMImage* pgm,
 		pgm->width);
 	printf("Height of img : %d px\n",
 		pgm->height);
-	printf("Max Gray value : %d\n",
-		pgm->maxValue);
+	printf("Max Gray value : %d\n",pgm->maxValue);
 
 	// close file
 	fclose(pgmfile);
