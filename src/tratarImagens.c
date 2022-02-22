@@ -108,6 +108,7 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     // alocando espaco para n linhas
     imagemRecebida->matriz = malloc(atoi(linhas) * sizeof(int));
 
+    strcpy(imagemRecebida->tipo, tipo); 
     imagemRecebida->colunas=atoi(colunas);
     imagemRecebida->linhas=atoi(linhas); 
     imagemRecebida->maxCinza=atoi(maxCinza);
@@ -146,13 +147,17 @@ void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
     FILE *imageout = fopen(saida,"w+");
     int i,j;
 
+    fprintf(imageout,"%s\n",imagemTratada->tipo);
+    fprintf(imageout,"%d %d\n",  imagemTratada->colunas,imagemTratada->linhas); 
+    fprintf(imageout,"%d\n", imagemTratada->maxCinza);
+
 //--- CHANGED ------ Start
-    for ( i = 0 ; i < imagemTratada->linhas; i++ )
+    for ( i = 0; i < imagemTratada->linhas; i++ )
     {
-        for ( j = 0 ; j < imagemTratada->colunas ; j++ )
+        for (j=0; j<imagemTratada->colunas;j++ )
         {
             fprintf( imageout,"%d  " , imagemTratada->matriz[i][j] );
-        }
+        } 
             fprintf( imageout,"\n" );
     }
 

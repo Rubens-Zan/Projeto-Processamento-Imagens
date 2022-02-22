@@ -25,7 +25,7 @@ int main()
 
     printf("Enter PGM file path:");
     scanf("%s",infpath);
-    imagein = fopen(infpath,"r+");
+    imagein = fopen(infpath,"rb");
 
     if(imagein == NULL)
     {

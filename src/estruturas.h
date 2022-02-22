@@ -14,7 +14,7 @@ typedef struct tImagemPGM {
     int colunas;
     int maxCinza;
     int **matriz;
-    char *tipo; 
+    char tipo[4]; 
 } tImagemPGM; 
 
 #endif
