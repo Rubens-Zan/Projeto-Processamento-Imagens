@@ -116,8 +116,7 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     int row,col, ch_int;
     for (row=0; row < imagemRecebida->linhas; row++){
         imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
-        for (col=0; col < imagemRecebida->colunas; col++)
-        {
+        for (col=0; col < imagemRecebida->colunas; col++){
             fscanf(imagemP,"%d", &ch_int);
             imagemRecebida->matriz[row][col] = ch_int;
         }
