@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tratarImagens.h"
+
 void proxLinhaDescomentada(FILE* fp){
 	int ch;
 	char line[100];
@@ -80,11 +82,11 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     char tipo[4];
     char colunas[5];
     char linhas[5];
+    char maxCinza[4];
     
     FILE *imagemP;
-    
-    if (strlen(entrada) > 1)
-    {
+
+    if (strcmp(entrada, "padrao") != 0){
         imagemP = abrirImagem(entrada);
     }else{
         imagemP = stdin;
@@ -99,31 +101,27 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
 
     copiarProxLinhaValida(imagemP, colunas);
     copiarProxLinhaValida(imagemP, linhas);
+    copiarProxLinhaValida(imagemP, maxCinza);
 
     tImagemPGM *imagemRecebida = malloc(sizeof(tImagemPGM));
+    
     // alocando espaco para n linhas
-    imagemRecebida->matriz = malloc(atoi(linhas) * sizeof(unsigned char*));
-    proxLinhaDescomentada(imagemP);
-    
-    fgetc(imagemP);
+    imagemRecebida->matriz = malloc(atoi(linhas) * sizeof(int));
 
-    for (int i = 0;i < atoi(linhas); i++) {
-        imagemRecebida->matriz[i]= malloc(atoi(colunas) * sizeof(unsigned char));
+    imagemRecebida->colunas=atoi(colunas);
+    imagemRecebida->linhas=atoi(linhas); 
+    imagemRecebida->maxCinza=atoi(maxCinza);
 
-        // If memory allocation
-        // is failed
-        if (imagemRecebida->matriz[i] == NULL) {
-            fprintf(stderr,
-                    "malloc failed\n");
-            exit(1);
+    int row,col, ch_int;
+    for (row=0; row < imagemRecebida->linhas; row++){
+        imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
+        for (col=0; col < imagemRecebida->colunas; col++)
+        {
+            fscanf(imagemP,"%d", &ch_int);
+            imagemRecebida->matriz[row][col] = ch_int;
         }
-
-        // Read the gray values and
-        // write on allocated memory
-        fread(imagemRecebida->matriz[i],sizeof(unsigned char),atoi(colunas), imagemP);
     }
-    
-    printf(" %s %s %s\n",tipo, colunas, linhas);
+
     fecharImagem(imagemP);
 
     //     typedef struct tImagemPGM {
@@ -138,5 +136,27 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     // return imagemLida;
 
 
+    imprimirImagem(imagemRecebida, "./testeopa.pgm"); 
     return imagemRecebida;
+}
+
+
+void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
+
+    FILE *imageout = fopen(saida,"w+");
+    int i,j;
+
+//--- CHANGED ------ Start
+    for ( i = 0 ; i < imagemTratada->linhas; i++ )
+    {
+        for ( j = 0 ; j < imagemTratada->colunas ; j++ )
+        {
+            fprintf( imageout,"%d  " , imagemTratada->matriz[i][j] );
+        }
+            fprintf( imageout,"\n" );
+    }
+
+    fclose(imageout);
+
+    free(imagemTratada);
 }

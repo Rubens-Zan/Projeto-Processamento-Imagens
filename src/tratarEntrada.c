@@ -12,12 +12,9 @@
 tComando *construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar){
     tComando *comando = (tComando *)malloc(sizeof(tComando));
 
-    if (strlen(entrada) > 1){
-        strcpy(comando->entrada, entrada);
-    }
-    if (strlen(saida) > 1){
-        strcpy(comando->saida, saida);
-    }
+    strcpy(comando->entrada, entrada);
+    strcpy(comando->saida, saida);
+
     comando->angulo = angulo;
     comando->limiar = limiar;
     comando->mascara = mascara;
@@ -43,11 +40,11 @@ int valorEhValido(int type, char* recebido){
 }
 
 tComando *tratamentoEntrada(int argc, char **argv){
-    char saida[100];
-    char entrada[100];
     int i;
     
     // flags com valores default
+    char saida[100]="padrao";
+    char entrada[100]="padrao"; 
     unsigned int mascara = 3; 
     float limiar = 1.5; 
     int angulo = 90; 

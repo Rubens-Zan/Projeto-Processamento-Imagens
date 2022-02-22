@@ -12,7 +12,7 @@ typedef struct tComando {
 typedef struct tImagemPGM {
     int linhas;
     int colunas;
-    int max_cinza;
+    int maxCinza;
     int **matriz;
     char *tipo; 
 } tImagemPGM; 
