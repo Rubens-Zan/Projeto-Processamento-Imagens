@@ -2,7 +2,7 @@
 #define PGM_H
  
  /*max size of an image*/
-#define MAX 800
+#define MAX 5000
  
  /*  
  #define LOW_VALUE 0 
@@ -22,7 +22,7 @@ struct PGMstructure
 int maxVal;
 int width;
 int height;
-RGB_INT data[MAX][MAX];
+int *data;
 };
 
 typedef struct PGMstructure PGMImage;

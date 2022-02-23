@@ -112,15 +112,54 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     imagemRecebida->colunas=atoi(colunas);
     imagemRecebida->linhas=atoi(linhas); 
     imagemRecebida->maxCinza=atoi(maxCinza);
-
     int row,col, ch_int;
-    for (row=0; row < imagemRecebida->linhas; row++){
-        imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
-        for (col=0; col < imagemRecebida->colunas; col++){
-            fscanf(imagemP,"%d", &ch_int);
-            imagemRecebida->matriz[row][col] = ch_int;
+    int ch;
+
+    if (strcmp(tipo, "P2") == 0){
+       for (row=imagemRecebida->linhas-1; row >=0; row--){
+        imagemRecebida->matriz[row]=malloc(imagemRecebida->colunas * sizeof(int)); 
+        for (col=0; col< imagemRecebida->colunas; col++){
+           fscanf(imagemP,"%d", &ch_int);
+           imagemRecebida->matriz[row][col] = ch_int;
         }
+       }
+    }else{
+        while(getc(imagemP) != '\n'); /*skip to end of line*/
+ 
+        for (row=imagemRecebida->linhas-1; row >=0; row--){
+            imagemRecebida->matriz[row]=malloc(imagemRecebida->colunas * sizeof(int)); 
+
+
+            for (col=0; col< imagemRecebida->colunas; col++){
+                ch = getc(imagemP);
+                imagemRecebida->matriz[row][col] = ch;
+            }
+        }
+
     }
+    // if (strcmp(tipo, "P2") == 0){
+    //     for (row=0; row < imagemRecebida->linhas; row++){
+    //         imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
+    //         for (col=0; col < imagemRecebida->colunas; col++){
+    //             fscanf(imagemP,"%d", &ch_int);
+    //             imagemRecebida->matriz[row][col] = ch_int;
+    //         }
+    // }
+    // }else  {
+    // //   while(getc(imagemP) != '\n'); /*skip to end of line*/
+ 
+    //     for (row=atoi(linhas)-1;row >=0; row--){
+    //         imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
+    //         for (col=0; col< imagemRecebida->colunas; col++){
+    //             ch = getc(imagemP);
+    //             imagemRecebida->matriz[row][col] = ch;
+    //         }
+    //     }
+    // }
+
+
+
+    
 
     fecharImagem(imagemP);
 

@@ -60,139 +60,164 @@ void getPGMfile (char filename[], PGMImage *img)
    printf("\n maxVal = %d",(*img).maxVal);
    printf("\n");
   
-   if (((*img).width  > MAX) || ((*img).height  > MAX))
-   {
-     printf("\n\n***ERROR - image too big for current image structure***\n\n");
-     exit(1);
-   }
+   // if (((*img).width  > MAX) || ((*img).height  > MAX))
+   // {
+   //   printf("\n\n***ERROR - image too big for current image structure***\n\n");
+   //   exit(1);
+   // }
+ 
+   (*img).data = (int *)malloc(img->height * img->width * sizeof(int)); 
  
    if(type == 2) /*uncompressed ascii file (B/W)*/
-   {
-      for (row=(*img).height-1; row >=0; row--)
-        for (col=0; col< (*img).width; col++)
-        {
+   {  
+      for (row=0; row < (*img).height-1; row++){
+        for (col=0; col< (*img).width; col++){
            fscanf(in_file,"%d", &ch_int);
-           (*img).data[row][col].red = ch_int;
-           (*img).data[row][col].green = ch_int;
-           (*img).data[row][col].blue = ch_int;
+         //   (*img).data[row][col] = ch_int;
+         *(img->data +row * img->width + col) = ch_int; 
         }
+      }
    }
-   else if(type == 3) /*uncompressed ascii file (color)*/
-   {
-      for (row=(*img).height-1; row >=0; row--)
-        for (col=0; col< (*img).width; col++)
-        {
+   // else if(type == 3) /*uncompressed ascii file (color)*/
+   // {
+   //    for (row=(*img).height-1; row >=0; row--)
+   //      for (col=0; col< (*img).width; col++)
+   //      {
  	  
- 	  fscanf(in_file,"%d", &ch_int);
- 	  ((*img).data[row][col].red) = (unsigned char)ch_int;
+ 	//   fscanf(in_file,"%d", &ch_int);
+ 	//   ((*img).data[row][col].red) = (unsigned char)ch_int;
       
- 	  fscanf(in_file,"%d", &ch_int);
- 	  ((*img).data[row][col].green) = (unsigned char)ch_int;
+ 	//   fscanf(in_file,"%d", &ch_int);
+ 	//   ((*img).data[row][col].green) = (unsigned char)ch_int;
  	  
- 	  fscanf(in_file,"%d", &ch_int);
- 	  ((*img).data[row][col].blue) = (unsigned char)ch_int;
-        }
-   }
+ 	//   fscanf(in_file,"%d", &ch_int);
+ 	//   ((*img).data[row][col].blue) = (unsigned char)ch_int;
+   //      }
+   // }
    else if(type == 5) /*compressed file (B/W)*/
  /*note: this type remains untested at this time...*/
    {
       while(getc(in_file) != '\n'); /*skip to end of line*/
- 
-        for (row=(*img).height-1; row >=0; row--)
-         for (col=0; col< (*img).width; col++)
-         {
-  	  ch = getc(in_file);
-            (*img).data[row][col].red = ch;
-            (*img).data[row][col].green = ch;
-            (*img).data[row][col].blue = ch;
+      {
+
+         for (row=0; row < (*img).height-1; row++){
+
+            for (col=0; col< (*img).width; col++){
+  	            ch = getc(in_file);
+               *(img->data +row * img->width + col) = ch; 
+
+            }
          }
+         
+      }
     }
   
-    else if(type == 6) /*compressed file (color)*/
-    {
-       while(getc(in_file) != '\n'); /*skip to end of line*/
+   //  else if(type == 6) /*compressed file (color)*/
+   //  {
+   //     while(getc(in_file) != '\n'); /*skip to end of line*/
   
-       for (row=(*img).height-1; row >=0; row--)
-         for (col=0; col< (*img).width; col++)
-         {
-            (*img).data[row][col].red = getc(in_file);
-            (*img).data[row][col].green = getc(in_file);
-            (*img).data[row][col].blue = getc(in_file);
-         }
-    }
+   //     for (row=(*img).height-1; row >=0; row--)
+   //       for (col=0; col< (*img).width; col++)
+   //       {
+   //          (*img).data[row][col]= getc(in_file);
+   //       }
+   //  }
   
     fclose(in_file);
     printf("\nDone reading file.\n");
   }
   
   
-  void save(PGMImage *img)
-  {
-     int i, j, nr, nc, k;
-     int red, green, blue;
-     FILE *iop;
+//   void save(PGMImage *img)
+//   {
+//      int i, j, nr, nc, k;
+//      int red, green, blue;
+//      FILE *iop;
   
-     nr = img->height;
-     nc = img->width;
+//      nr = img->height;
+//      nc = img->width;
+
+//      iop = fopen("image1.pgm", "w");
+//      fprintf(iop, "P6\n");
+//      fprintf(iop, "%d %d\n", nc, nr);
+//      fprintf(iop, "255\n");
       
-     iop = fopen("image1.pgm", "w");
-     fprintf(iop, "P6\n");
-     fprintf(iop, "%d %d\n", nc, nr);
-     fprintf(iop, "255\n");
-      
-     k = 1;
-     for(i = nr - 1; i  >= 0; i--)
-     {
-        for(j = 0; j <  nc; j++)
-        {
-           red = img->data[i][j].red;
-           green = img->data[i][j].green;
-           blue = img->data[i][j].blue;
-           if(red <  0)
-           {
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", red, i, j);
-              printf("           Setting red to zero\n");
-              red = 0;
-           }
-           if(green <  0)   
-           {
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", green,i, j);
-              printf("           Setting green to zero\n");
-              green = 0;
-           }
-           if(blue <  0)   
-           {
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", blue, i, j);
-              printf("           Setting green to zero\n");
-              blue = 0;
-           }
-           if(red  > 255) 
-           {   
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", red, i, j);
-              printf("           Setting red to 255\n");
-              red = 255;
-           }
-           if(green  > 255)
-           {
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", green,i, j);
-              printf("           Setting green to 255\n");
-              green = 255;
-           }
-           if(blue  > 255)
-           {
-              printf("IMG_WRITE: Found value %d at row %d col %d\n", blue, i, j);
-              printf("           Setting blue to 255\n");
-              blue = 255;
-           }
+//      k = 1;
+//      for(i = nr - 1; i  >= 0; i--)
+//      {
+//         for(j = 0; j <  nc; j++)
+//         {
+//            red = img->data[i][j].red;
+//            green = img->data[i][j].green;
+//            blue = img->data[i][j].blue;
+//            if(red <  0)
+//            {
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", red, i, j);
+//               printf("           Setting red to zero\n");
+//               red = 0;
+//            }
+//            if(green <  0)   
+//            {
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", green,i, j);
+//               printf("           Setting green to zero\n");
+//               green = 0;
+//            }
+//            if(blue <  0)   
+//            {
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", blue, i, j);
+//               printf("           Setting green to zero\n");
+//               blue = 0;
+//            }
+//            if(red  > 255) 
+//            {   
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", red, i, j);
+//               printf("           Setting red to 255\n");
+//               red = 255;
+//            }
+//            if(green  > 255)
+//            {
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", green,i, j);
+//               printf("           Setting green to 255\n");
+//               green = 255;
+//            }
+//            if(blue  > 255)
+//            {
+//               printf("IMG_WRITE: Found value %d at row %d col %d\n", blue, i, j);
+//               printf("           Setting blue to 255\n");
+//               blue = 255;
+//            }
   
-  	 putc(red, iop);
-  	 putc(green, iop);
-  	 putc(blue, iop);
-        }
-     }
-     fprintf(iop, "\n");
-     fclose(iop);
-  }
+//   	 putc(red, iop);
+//   	 putc(green, iop);
+//   	 putc(blue, iop);
+//         }
+//      }
+//      fprintf(iop, "\n");
+//      fclose(iop);
+//   }
+
+
+void imprimirImagem(PGMImage *imagemTratada, char *saida){
+
+    FILE *imageout = fopen(saida,"w+");
+    int i,j;
+
+    fprintf(imageout,"%s\n","P2");
+    fprintf(imageout,"%d %d\n",  imagemTratada->width,imagemTratada->height); 
+    fprintf(imageout,"%d\n", imagemTratada->maxVal);
+
+//--- CHANGED ------ Start
+    for ( i = 0; i < imagemTratada->height; i++ ){
+        for (j=0; j<imagemTratada->width ;j++ ){
+            fprintf( imageout,"%d  " , *(imagemTratada->data + i*imagemTratada->width + j) );
+         } 
+         fprintf( imageout,"\n" );
+    }
+
+    fclose(imageout);
+
+   //  free(imagemTratada);
+}
 
 
 
@@ -213,7 +238,9 @@ int main()
     scanf("%s",infpath);
 
     getPGMfile(infpath, imginfo);
-    save(imginfo);
+   imprimirImagem(imginfo,"iamgeteste.pgm"); 
+   free(imginfo); 
+   //  save(imginfo);
     
 
 
