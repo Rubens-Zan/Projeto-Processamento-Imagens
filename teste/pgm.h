@@ -19,10 +19,11 @@ typedef struct {
   
 struct PGMstructure 
 {
-int maxVal;
-int width;
-int height;
-int *data;
+  int tipo;
+  int maxVal;
+  int width;
+  int height;
+  int *data;
 };
 
 typedef struct PGMstructure PGMImage;

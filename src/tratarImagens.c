@@ -78,11 +78,8 @@ void fecharImagem(FILE *fp){
     fclose(fp);
 }
 
-tImagemPGM *retornarImagemDeEntrada(char *entrada){
+void retornarImagemDeEntrada(char *entrada, tImagemPGM *img){
     char tipo[4];
-    char colunas[5];
-    char linhas[5];
-    char maxCinza[4];
     
     FILE *imagemP;
 
@@ -93,96 +90,66 @@ tImagemPGM *retornarImagemDeEntrada(char *entrada){
     }
 
     copiarProxLinhaValida(imagemP, tipo);
+
     if (!(strcmp(tipo, "P5") == 0 || strcmp(tipo, "P2") == 0)) {
 		fprintf(stderr,
 				"Wrong file type!\n");
 		exit(EXIT_FAILURE);
 	}
 
-    copiarProxLinhaValida(imagemP, colunas);
-    copiarProxLinhaValida(imagemP, linhas);
-    copiarProxLinhaValida(imagemP, maxCinza);
+     while(getc(imagemP) != '\n');             /* skip to end of line*/
+ 
+   while (getc(imagemP) == '#')              /* skip comment lines */
+   {
+     while (getc(imagemP) != '\n');          /* skip to end of comment line */
+   }
+ 
+   /*there seems to be a difference between color and b/w.  This line is needed
+     by b/w but doesn't effect color reading...*/
+   fseek(imagemP, -1, SEEK_CUR);             /* backup one character*/
+   fscanf(imagemP,"%d", &((*img).colunas));
+   fscanf(imagemP,"%d", &((*img).linhas));
+   fscanf(imagemP,"%d", &((*img).maxCinza));
+   strcpy((*img).tipo, tipo); 
 
-    tImagemPGM *imagemRecebida = malloc(sizeof(tImagemPGM));
+    printf("Tipo %s\n",tipo);
+    printf("\n width  = %d",(*img).colunas);
+    printf("\n height = %d",(*img).linhas);
+    printf("\n maxVal = %d",(*img).maxCinza);
+
     
-    // alocando espaco para n linhas
-    imagemRecebida->matriz = malloc(atoi(linhas) * sizeof(int));
+    // utilizando aritmetica de ponteiros
 
-    strcpy(imagemRecebida->tipo, tipo); 
-    imagemRecebida->colunas=atoi(colunas);
-    imagemRecebida->linhas=atoi(linhas); 
-    imagemRecebida->maxCinza=atoi(maxCinza);
+   (*img).matriz = (int *)malloc((*img).linhas * (*img).colunas * sizeof(int)); 
+
+
     int row,col, ch_int;
     int ch;
 
     if (strcmp(tipo, "P2") == 0){
-       for (row=imagemRecebida->linhas-1; row >=0; row--){
-        imagemRecebida->matriz[row]=malloc(imagemRecebida->colunas * sizeof(int)); 
-        for (col=0; col< imagemRecebida->colunas; col++){
+       for (row=0; row < ( *img).linhas-1; row++){
+        for (col=0; col< (*img).colunas; col++){
            fscanf(imagemP,"%d", &ch_int);
-           imagemRecebida->matriz[row][col] = ch_int;
+           *(img->matriz +row * img->colunas + col) = ch_int;
         }
        }
     }else{
         while(getc(imagemP) != '\n'); /*skip to end of line*/
- 
-        for (row=imagemRecebida->linhas-1; row >=0; row--){
-            imagemRecebida->matriz[row]=malloc(imagemRecebida->colunas * sizeof(int)); 
-
-
-            for (col=0; col< imagemRecebida->colunas; col++){
-                ch = getc(imagemP);
-                imagemRecebida->matriz[row][col] = ch;
+        for (row=(*img).linhas-1; row >=0; row--){
+            for (col=0; col< (*img).colunas; col++){
+                *(img->matriz +row * img->colunas + col) = getc(imagemP);;
             }
         }
 
     }
-    // if (strcmp(tipo, "P2") == 0){
-    //     for (row=0; row < imagemRecebida->linhas; row++){
-    //         imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
-    //         for (col=0; col < imagemRecebida->colunas; col++){
-    //             fscanf(imagemP,"%d", &ch_int);
-    //             imagemRecebida->matriz[row][col] = ch_int;
-    //         }
-    // }
-    // }else  {
-    // //   while(getc(imagemP) != '\n'); /*skip to end of line*/
- 
-    //     for (row=atoi(linhas)-1;row >=0; row--){
-    //         imagemRecebida->matriz[row]= malloc(imagemRecebida->colunas * sizeof(int));
-    //         for (col=0; col< imagemRecebida->colunas; col++){
-    //             ch = getc(imagemP);
-    //             imagemRecebida->matriz[row][col] = ch;
-    //         }
-    //     }
-    // }
-
-
-
-    
 
     fecharImagem(imagemP);
-
-    //     typedef struct tImagemPGM {
-    //           int linhas;
-    //           int colunas;
-    //           int max_cinza;
-    //           int **matriz;
-    //      } tImagemPGM;
-
-    // tImagemPGM = imagem;
-
-    // return imagemLida;
-
-
-    imprimirImagem(imagemRecebida, "./testeopa.pgm"); 
-    return imagemRecebida;
 }
 
 
 void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
 
-    FILE *imageout = fopen(saida,"w+");
+    FILE *imageout = fopen(saida,"w");
     int i,j;
 
     fprintf(imageout,"%s\n",imagemTratada->tipo);
@@ -190,16 +157,23 @@ void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
     fprintf(imageout,"%d\n", imagemTratada->maxCinza);
 
 //--- CHANGED ------ Start
-    for ( i = 0; i < imagemTratada->linhas; i++ )
-    {
-        for (j=0; j<imagemTratada->colunas;j++ )
-        {
-            fprintf( imageout,"%d  " , imagemTratada->matriz[i][j] );
-        } 
+    if (strcmp(imagemTratada->tipo, "P2") == 0){
+        for ( i = 0; i < imagemTratada->linhas; i++){
+            for (j=0; j<imagemTratada->colunas;j++){
+                fprintf( imageout,"%d  " , *(imagemTratada->matriz + i*imagemTratada->colunas + j));
+            } 
             fprintf( imageout,"\n" );
+        }
+
+    }else {
+        for(i = imagemTratada->linhas - 1; i  >= 0; i--){
+            for(j = 0; j <  imagemTratada->colunas; j++){
+                putc(*(imagemTratada->matriz + i*imagemTratada->colunas + j), imageout);
+            }
+        }
+        fprintf(imageout, "\n");
     }
 
-    fclose(imageout);
 
-    free(imagemTratada);
+    fclose(imageout);
 }
