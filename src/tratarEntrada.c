@@ -9,8 +9,8 @@
 #define RED "\e[0;31m"
 #define NC "\e[0m"
 
-tComando *construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar){
-    tComando *comando = (tComando *)malloc(sizeof(tComando));
+void construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar, tComando *comando){
+    // tComando *comando = (tComando *)malloc(sizeof(tComando));
 
     strcpy(comando->entrada, entrada);
     strcpy(comando->saida, saida);
@@ -19,7 +19,7 @@ tComando *construaComando(char *entrada,char *saida, int mascara, int angulo,flo
     comando->limiar = limiar;
     comando->mascara = mascara;
 
-    return comando; 
+    // return comando; 
 }
 
 int valorEhValido(int type, char* recebido){
@@ -39,14 +39,14 @@ int valorEhValido(int type, char* recebido){
     return 1; 
 }
 
-tComando *tratamentoEntrada(int argc, char **argv){
+void tratamentoEntrada(int argc, char **argv, tComando *comando){
     int i;
     
     // flags com valores default
     char saida[100]="padrao";
     char entrada[100]="padrao"; 
     unsigned int mascara = 3; 
-    float limiar = 1.5; 
+    float limiar = 0.5; 
     int angulo = 90; 
 
     for (i=0;i<argc;i++){
@@ -74,6 +74,6 @@ tComando *tratamentoEntrada(int argc, char **argv){
         }
     }
 
-    tComando *comando = construaComando(entrada,saida,mascara,angulo,limiar);
-    return comando;
+    construaComando(entrada,saida,mascara,angulo,limiar, comando);
+    // return comando;
 }

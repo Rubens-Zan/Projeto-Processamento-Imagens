@@ -3,26 +3,33 @@
 # Para remover os arquivos temporários digite make clean
 # Para remover os arquivos temporários e o arquivo executável digite make purge
 
-CFLAGS = -Wall -g
+CFLAGS = -Wall
 
 MODULOS = tratarEntrada \
 	tratarImagens \
-	pgmLimiar \
-	pgmMedia \
-	pgmMediana \
-	pgmNega 
+	acessoImagens
 
 
 OBJETOS = $(addsuffix .o,$(MODULOS)) 
 
 .PHONY : all clean
 
-all : teste
+all : pgmlimiar pgmnega pgmmedia pgmmediana
 
-teste : $(OBJETOS)
+pgmlimiar: $(OBJETOS)
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlimiar.c
+
+pgmmediana: $(OBJETOS) 
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmediana.c
+
+pgmmedia: $(OBJETOS)	
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmedia.c
+	
+pgmnega: $(OBJETOS)
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmnega.c
 
 clean : 
 	$(RM) $(OBJETOS)
 
 purge: 
-	$(RM) $(OBJETOS) teste
+	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmediana pgmmmedia
