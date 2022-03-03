@@ -35,4 +35,4 @@ clean :
 	$(RM) $(OBJETOS)
 
 purge: 
-	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmediana pgmmmedia pgmrotacao
+	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmedia pgmmediana pgmmmedia pgmrotacao
