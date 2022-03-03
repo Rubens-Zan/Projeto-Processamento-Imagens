@@ -83,11 +83,6 @@ void retornarImagemDeEntrada(char *entrada, tImagemPGM *img){
     fscanf(imagemP,"%d", &((*img).maxCinza));
     strcpy((*img).tipo, tipo); 
 
-    printf("Tipo %s\n",tipo);
-    printf("\n width  = %d",(*img).colunas);
-    printf("\n height = %d",(*img).linhas);
-    printf("\n maxVal = %d",(*img).maxCinza);
-
     
     // utilizando aritmetica de ponteiros
    (*img).matriz = (int *)malloc((*img).linhas * (*img).colunas * sizeof(int)); 

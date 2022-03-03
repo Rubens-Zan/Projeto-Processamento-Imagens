@@ -7,12 +7,13 @@
 
 
 int main(int argc, char **argv){
-        tComando *comando = (tComando *)malloc(sizeof(tComando));
+    tComando *comando = (tComando *)malloc(sizeof(tComando));
     tratamentoEntrada(argc,argv,comando);
     tImagemPGM *imagem = malloc(sizeof(tImagemPGM));
     retornarImagemDeEntrada(comando->entrada,imagem); 
     filtroNegativo(imagem);
     imprimirImagem(imagem,comando->saida);
     free(imagem); 
+    free(comando); 
     return 0;
 }

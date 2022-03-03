@@ -10,16 +10,11 @@
 #define NC "\e[0m"
 
 void construaComando(char *entrada,char *saida, int mascara, int angulo,float limiar, tComando *comando){
-    // tComando *comando = (tComando *)malloc(sizeof(tComando));
-
     strcpy(comando->entrada, entrada);
     strcpy(comando->saida, saida);
-
     comando->angulo = angulo;
     comando->limiar = limiar;
     comando->mascara = mascara;
-
-    // return comando; 
 }
 
 int valorEhValido(int type, char* recebido){
@@ -75,5 +70,4 @@ void tratamentoEntrada(int argc, char **argv, tComando *comando){
     }
 
     construaComando(entrada,saida,mascara,angulo,limiar, comando);
-    // return comando;
 }
