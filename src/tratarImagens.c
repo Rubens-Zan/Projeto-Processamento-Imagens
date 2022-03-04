@@ -27,8 +27,8 @@ void filtroNegativo(tImagemPGM *imagem){
 
 void filtroMedia(tImagemPGM *imagem){
     int linhaAtual,colunaAtual; 
-    for (linhaAtual=0; linhaAtual <= imagem->linhas; linhaAtual++){
-        for (colunaAtual=0; colunaAtual<= imagem->colunas;colunaAtual++){
+    for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
+        for (colunaAtual=0; colunaAtual < imagem->colunas;colunaAtual++){
             *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=mediaVizinhos(imagem,linhaAtual,colunaAtual); 
         }
     } 
@@ -37,7 +37,7 @@ void filtroMedia(tImagemPGM *imagem){
 void filtroMediana(tImagemPGM *imagem, int mascara){
     int linhaAtual,colunaAtual; 
     for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
-        for (colunaAtual=0; colunaAtual<=imagem->colunas;colunaAtual++){
+        for (colunaAtual=0; colunaAtual<imagem->colunas;colunaAtual++){
             *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=medianaVizinhos(imagem,linhaAtual,colunaAtual,mascara); 
         }
     } 
@@ -88,10 +88,10 @@ int mediaVizinhos(tImagemPGM *imagem, int lin,int col){
     for (i=-1;i<=1;i++){
         linAtual=lin+i;
 
-        if (linAtual >= 0 && linAtual <= imagem->linhas){
+        if (linAtual >= 0 && linAtual < imagem->linhas){
             for(j=-1;j<=1;j++){
                 colAtual=col+j;
-                if (colAtual >= 0 && colAtual <= imagem->colunas){
+                if (colAtual >= 0 && colAtual < imagem->colunas){
                     soma+=*(imagem->matriz+linAtual*imagem->colunas+colAtual);
                     vizinhos++;     
                 }
