@@ -112,8 +112,12 @@ void retornarImagemDeEntrada(char *entrada, tImagemPGM *img){
 
 
 void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
-
-    FILE *imageout = fopen(saida,"w");
+    FILE *imageout;  
+    if (strcmp(saida,"padrao") == 0){
+        imageout = stdout;
+    }else {
+        imageout = fopen(saida,"w");  
+    }
     int i,j;
 
     fprintf(imageout,"%s\n",imagemTratada->tipo);

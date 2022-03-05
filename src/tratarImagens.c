@@ -5,8 +5,8 @@
 
 void filtroLimiar(int limiar, tImagemPGM *imagem){
     int linhaAtual,colunaAtual; 
-    for (linhaAtual=0; linhaAtual <= imagem->linhas; linhaAtual++){
-        for (colunaAtual=0; colunaAtual <= imagem->colunas;colunaAtual++){
+    for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
+        for (colunaAtual=0; colunaAtual < imagem->colunas;colunaAtual++){
             if (*(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual) > limiar){
                 *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=imagem->maxCinza; 
             } else{
