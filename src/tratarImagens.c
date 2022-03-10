@@ -52,6 +52,7 @@ int medianaVizinhos(tImagemPGM *imagem, int lin, int col,int mascara){
     int nVizinhos=0; 
     int linhaAtual,colunaAtual,mediana,i,j; 
     int vizinhosMascara = floor(mascara/2); 
+    // ignorando pixeis que nao tem todos os vizinhos
     if (lin - vizinhosMascara < 0 || lin + vizinhosMascara > imagem->linhas || col - vizinhosMascara < 0 || col + vizinhosMascara > imagem->colunas){
         return *(imagem->matriz+lin*imagem->colunas+col);
     }
@@ -122,4 +123,55 @@ void rotacaoSimples(tImagemPGM *imagem){
     }
 
     free(transposed); 
+}
+
+void filtroLBP(tImagemPGM *imagem){
+    int vizinhosLBP[3][3] = {
+        {1,2,4},
+        {8,0,16},
+        {32,64,128}
+    };
+    int linhas = imagem->linhas;
+    int colunas = imagem->colunas;
+    int *matrizLBP=malloc(sizeof(int)*linhas*colunas);
+    int i, j, linAtual, colAtual,pixelCentral,pixelAtual,soma; 
+
+    int lin,col; 
+    for (lin=0; lin < imagem->linhas; lin++){
+        for (col=0; col <imagem->colunas;col++){
+            soma = 0;
+            pixelCentral = *(imagem->matriz+lin*imagem->colunas+col);
+
+            for (i=-1;i<=1;i++){
+                linAtual=lin+i;
+
+                if (linAtual >= 0 && linAtual < imagem->linhas){
+                    for(j=-1;j<=1;j++){
+                        colAtual=col+j;
+                        if (colAtual >= 0 && colAtual < imagem->colunas){
+                            pixelAtual=*(imagem->matriz+linAtual*imagem->colunas+colAtual);
+
+                            if (pixelAtual > pixelCentral){
+                                soma+=vizinhosLBP[i+1][j+1];
+                            }
+                        }
+                    }
+                } 
+            }
+
+            
+        *(matrizLBP + lin*colunas + col)=soma; 
+        }
+
+    } 
+
+
+    for (i = 0; i < linhas; i++){
+        for (j = 0; j < colunas;j++){
+            *(imagem->matriz + i*imagem->colunas + j)=*(matrizLBP + i*imagem->colunas + j); 
+        }
+    }
+    
+
+    free(matrizLBP); 
 }

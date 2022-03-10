@@ -14,7 +14,7 @@ OBJETOS = $(addsuffix .o,$(MODULOS))
 
 .PHONY : all clean
 
-all : pgmlimiar pgmnega pgmmedia pgmmediana pgmrotacao
+all : pgmlimiar pgmnega pgmmedia pgmmediana pgmrotacao pgmlbp
 
 pgmlimiar: $(OBJETOS)
 	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlimiar.c
@@ -31,8 +31,11 @@ pgmmedia: $(OBJETOS)
 pgmnega: $(OBJETOS)
 	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmnega.c
 
+pgmlbp: $(OBJETOS)
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlbp.c
+
 clean : 
 	$(RM) $(OBJETOS)
 
 purge: 
-	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmedia pgmmediana pgmmmedia pgmrotacao
+	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmedia pgmmediana pgmmmedia pgmrotacao pgmlbp
