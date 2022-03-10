@@ -79,7 +79,7 @@ void filtroRotacao(tImagemPGM *imagem, int angulo){
 
         		if(xs >= 0 && xs < width && ys >= 0 && ys < height) {
         			/* set target pixel (x,y) to color at (xs,ys) */
-                    *(transposta +x * height +y)=*(imagem->matriz + xt * height + yt);
+                    *(transposta +x * height +y)=*(imagem->matriz + xs * height + ys);
 
         		} else {
         			/* set target pixel (x,y) to some default background */
