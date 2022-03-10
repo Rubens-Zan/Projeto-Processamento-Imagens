@@ -3,7 +3,7 @@
 # Para remover os arquivos temporários digite make clean
 # Para remover os arquivos temporários e o arquivo executável digite make purge
 
-CFLAGS = -Wall
+CFLAGS = -Wall -lm
 
 MODULOS = tratarEntrada \
 	tratarImagens \
@@ -27,8 +27,8 @@ pgmrotacao: $(OBJETOS)
 pgmmediana: $(OBJETOS) 
 	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmediana.c
 
-pgmmedia: $(OBJETOS)	
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmedia.c
+pgmmedia: $(OBJETOS)	 
+	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmedia.c 
 	
 pgmnega: $(OBJETOS)
 	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmnega.c

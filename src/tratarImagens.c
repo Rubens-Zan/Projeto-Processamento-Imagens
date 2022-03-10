@@ -49,31 +49,46 @@ void filtroRotacao(tImagemPGM *imagem, int angulo){
             rotacao90Graus(imagem); 
         }
     }else{
+
+
         // TODO x1
 
         /* assuming width and height are integers with the image's dimensions */
+        int angle,x,y,width,height;
+        width = imagem->colunas;
+        height = imagem->linhas; 
+        angle = angulo; 
 
-        // for(int x = 0; x < width; x++) {
-        // 	for(int y = 0; y < height; y++) {
-        // 		int hwidth = width / 2;
-        // 		int hheight = height / 2;
-                
-        // 		int xt = x - hwidth;
-        // 		int yt = y - hheight;
-                
-        // 		double sinma = sin(-angle);
-        // 		double cosma = cos(-angle);
-                
-        // 		int xs = (int)round((cosma * xt - sinma * yt) + hwidth);
-        // 		int ys = (int)round((sinma * xt + cosma * yt) + hheight);
+        int *transposta=malloc(sizeof(int)*height*width);
 
-        // 		if(xs >= 0 && xs < width && ys >= 0 && ys < height) {
-        // 			/* set target pixel (x,y) to color at (xs,ys) */
-        // 		} else {
-        // 			/* set target pixel (x,y) to some default background */
-        // 		}
-        // 	}
-        // }
+
+        for(int x = 0; x < width; x++) {
+        		double sinma = sin(-angle);
+        		double cosma = cos(-angle);
+
+        		int hwidth = width / 2;
+        		int hheight = height / 2;
+
+        	for(int y = 0; y < height; y++) {
+        		int xt = x - hwidth;
+        		int yt = y - hheight;
+                
+                
+        		int xs = (int)round((cosma * xt - sinma * yt) + hwidth);
+        		int ys = (int)round((sinma * xt + cosma * yt) + hheight);
+
+        		if(xs >= 0 && xs < width && ys >= 0 && ys < height) {
+        			/* set target pixel (x,y) to color at (xs,ys) */
+                    *(transposta +x * height +y)=*(imagem->matriz + xt * height + yt);
+
+        		} else {
+        			/* set target pixel (x,y) to some default background */
+                    *(transposta +x * height +y)=0; 
+        		}
+        	}
+        }
+        copiarMatrizes(imagem->matriz,transposta, imagem->linhas,imagem->colunas);
+        free(transposta);
     }
     
 }
