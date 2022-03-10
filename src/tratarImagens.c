@@ -44,8 +44,38 @@ void filtroMediana(tImagemPGM *imagem, int mascara){
 }
 
 void filtroRotacao(tImagemPGM *imagem, int angulo){
+    if (angulo % 90 == 0){
+        for (int i=0;i<angulo/90;i++){
+            rotacao90Graus(imagem); 
+        }
+    }else{
+        // TODO x1
+
+        /* assuming width and height are integers with the image's dimensions */
+
+        // for(int x = 0; x < width; x++) {
+        // 	for(int y = 0; y < height; y++) {
+        // 		int hwidth = width / 2;
+        // 		int hheight = height / 2;
+                
+        // 		int xt = x - hwidth;
+        // 		int yt = y - hheight;
+                
+        // 		double sinma = sin(-angle);
+        // 		double cosma = cos(-angle);
+                
+        // 		int xs = (int)round((cosma * xt - sinma * yt) + hwidth);
+        // 		int ys = (int)round((sinma * xt + cosma * yt) + hheight);
+
+        // 		if(xs >= 0 && xs < width && ys >= 0 && ys < height) {
+        // 			/* set target pixel (x,y) to color at (xs,ys) */
+        // 		} else {
+        // 			/* set target pixel (x,y) to some default background */
+        // 		}
+        // 	}
+        // }
+    }
     
-    rotacao90Graus(imagem); 
 }
 
 int cmpfunc (const void * a, const void * b) {
