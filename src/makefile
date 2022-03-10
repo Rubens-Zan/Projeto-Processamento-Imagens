@@ -12,9 +12,11 @@ MODULOS = tratarEntrada \
 
 OBJETOS = $(addsuffix .o,$(MODULOS)) 
 
+ALVOS =  pgmlimiar pgmnega pgmmedia pgmmediana pgmrotacao pgmlbp 
+
 .PHONY : all clean
 
-all : pgmlimiar pgmnega pgmmedia pgmmediana pgmrotacao pgmlbp
+all : $(ALVOS)
 
 pgmlimiar: $(OBJETOS)
 	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlimiar.c
@@ -38,4 +40,4 @@ clean :
 	$(RM) $(OBJETOS)
 
 purge: 
-	$(RM) $(OBJETOS) pgmlimiar pgmnega pgmmedia pgmmediana pgmmmedia pgmrotacao pgmlbp
+	$(RM) $(OBJETOS) $(ALVOS)
