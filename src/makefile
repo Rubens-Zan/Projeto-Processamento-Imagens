@@ -19,22 +19,22 @@ ALVOS =  pgmlimiar pgmnega pgmmedia pgmmediana pgmrotacao pgmlbp
 all : $(ALVOS)
 
 pgmlimiar: $(OBJETOS)
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlimiar.c
+	gcc -o $@ $(OBJETOS) pgmlimiar.c $(CFLAGS)
 
 pgmrotacao: $(OBJETOS)
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmrotacao.c
+	gcc -o $@ $(OBJETOS) pgmrotacao.c $(CFLAGS)
 
 pgmmediana: $(OBJETOS) 
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmediana.c
+	gcc -o $@ $(OBJETOS) pgmmediana.c $(CFLAGS)
 
 pgmmedia: $(OBJETOS)	 
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmmedia.c 
+	gcc -o $@ $(OBJETOS) pgmmedia.c $(CFLAGS)
 	
 pgmnega: $(OBJETOS)
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmnega.c
+	gcc -o $@ $(OBJETOS) pgmnega.c $(CFLAGS)
 
 pgmlbp: $(OBJETOS)
-	gcc $(CFLAGS) -o $@ $(OBJETOS) pgmlbp.c
+	gcc -o $@ $(OBJETOS) pgmlbp.c $(CFLAGS)
 
 clean : 
 	$(RM) $(OBJETOS)

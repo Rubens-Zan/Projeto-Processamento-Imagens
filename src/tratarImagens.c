@@ -62,14 +62,14 @@ void filtroRotacao(tImagemPGM *imagem, int angulo){
         int *transposta=malloc(sizeof(int)*height*width);
 
 
-        for(int x = 0; x < width; x++) {
+        for(x = 0; x < width; x++) {
         		double sinma = sin(-angle);
         		double cosma = cos(-angle);
 
         		int hwidth = width / 2;
         		int hheight = height / 2;
 
-        	for(int y = 0; y < height; y++) {
+        	for(y = 0; y < height; y++) {
         		int xt = x - hwidth;
         		int yt = y - hheight;
                 
