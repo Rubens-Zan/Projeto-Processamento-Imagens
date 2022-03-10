@@ -43,6 +43,11 @@ void filtroMediana(tImagemPGM *imagem, int mascara){
     } 
 }
 
+void filtroRotacao(tImagemPGM *imagem, int angulo){
+    
+    rotacao90Graus(imagem); 
+}
+
 int cmpfunc (const void * a, const void * b) {
    return ( *(int*)a - *(int*)b );
 }
@@ -104,7 +109,7 @@ int mediaVizinhos(tImagemPGM *imagem, int lin,int col){
     return media; 
 }
 
-void rotacaoSimples(tImagemPGM *imagem){
+void rotacao90Graus(tImagemPGM *imagem){
     int r, c;
     int linhas = imagem->linhas;
     int colunas = imagem->colunas;

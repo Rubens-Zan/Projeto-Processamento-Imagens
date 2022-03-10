@@ -11,7 +11,7 @@ int main(int argc, char **argv){
     tratamentoEntrada(argc,argv,comando);
     tImagemPGM *imagem = malloc(sizeof(tImagemPGM));
     retornarImagemDeEntrada(comando->entrada,imagem); 
-    rotacaoSimples(imagem);
+    filtroRotacao(imagem, comando->angulo);
     imprimirImagem(imagem,comando->saida);
     free(imagem); 
     free(comando); 
