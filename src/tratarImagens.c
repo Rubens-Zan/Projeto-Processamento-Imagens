@@ -8,7 +8,7 @@ void filtroLimiar(int limiar, tImagemPGM *imagem){
     for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
         for (colunaAtual=0; colunaAtual < imagem->colunas;colunaAtual++){
             if (*(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual) > limiar){
-                *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=imagem->maxCinza; 
+                *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=imagem->maxVal; 
             } else{
                 *(imagem->matriz + linhaAtual*imagem->colunas + colunaAtual)=0; 
             }
@@ -44,51 +44,52 @@ void filtroMediana(tImagemPGM *imagem, int mascara){
 }
 
 void filtroRotacao(tImagemPGM *imagem, int angulo){
+    // retornando em angulos que a imagem nao precisa ser rotacionada
+    if (angulo == 0 || angulo % 360 == 0){
+        return; 
+    }
+    // se o angulo for divisivel por 90, basta efetuar rotacoes
     if (angulo % 90 == 0){
         for (int i=0;i<angulo/90;i++){
             rotacao90Graus(imagem); 
         }
     }else{
+        int x,y,velhaLargura,velhaAltura;
+        velhaLargura = imagem->colunas;
+        velhaAltura = imagem->linhas; 
+        double sinA = fabs(sin(angulo));
+        double cosA = fabs(cos(angulo));
 
 
-        // TODO x1
+        int novaAltura = sinA*velhaLargura+cosA*velhaAltura; 
+        int novaLargura = cosA*velhaLargura+sinA*velhaAltura;
+        int *rotacionada=malloc(sizeof(int)*novaAltura*novaLargura);
 
-        /* assuming width and height are integers with the image's dimensions */
-        int angle,x,y,width,height;
-        width = imagem->colunas;
-        height = imagem->linhas; 
-        angle = angulo; 
+        for(x = 0; x < novaLargura; x++) {
+            int larguraCentro = (novaLargura-1) / 2;
+            int alturaCentro = (velhaAltura-1) / 2;
 
-        int *transposta=malloc(sizeof(int)*height*width);
+        	for(y = 0; y < novaAltura; y++) {
+        		int xt = x - larguraCentro;
+        		int yt = y - alturaCentro;
+        		int xs = (int)round((cosA * xt - sinA * yt) + larguraCentro);
+        		int ys = (int)round((sinA * xt + cosA * yt) + alturaCentro);
 
-
-        for(x = 0; x < width; x++) {
-        		double sinma = sin(-angle);
-        		double cosma = cos(-angle);
-
-        		int hwidth = width / 2;
-        		int hheight = height / 2;
-
-        	for(y = 0; y < height; y++) {
-        		int xt = x - hwidth;
-        		int yt = y - hheight;
-                
-                
-        		int xs = (int)round((cosma * xt - sinma * yt) + hwidth);
-        		int ys = (int)round((sinma * xt + cosma * yt) + hheight);
-
-        		if(xs >= 0 && xs < width && ys >= 0 && ys < height) {
-        			/* set target pixel (x,y) to color at (xs,ys) */
-                    *(transposta +x * height +y)=*(imagem->matriz + xs * height + ys);
-
+        		if(xs >= 0 && xs < velhaLargura && ys >= 0 && ys < velhaAltura) {
+                    *(rotacionada +x*novaAltura+y)=*(imagem->matriz + xs * velhaAltura + ys);
         		} else {
-        			/* set target pixel (x,y) to some default background */
-                    *(transposta +x * height +y)=0; 
+                    // setando para branco
+                    *(rotacionada +x*novaAltura +y)=imagem->maxVal; 
         		}
         	}
         }
-        copiarMatrizes(imagem->matriz,transposta, imagem->linhas,imagem->colunas);
-        free(transposta);
+        
+        imagem->colunas=novaLargura;  
+        imagem->linhas=novaAltura;
+        free(imagem->matriz); 
+        imagem->matriz=malloc(sizeof(int)*novaAltura*novaLargura);
+        copiarMatrizes(imagem->matriz,rotacionada, novaAltura,novaLargura);
+        free(rotacionada);
     }
     
 }

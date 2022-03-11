@@ -80,7 +80,7 @@ void retornarImagemDeEntrada(char *entrada, tImagemPGM *img){
     fseek(imagemP, -1, SEEK_CUR);             /* backup one character*/
     fscanf(imagemP,"%d", &((*img).colunas));
     fscanf(imagemP,"%d", &((*img).linhas));
-    fscanf(imagemP,"%d", &((*img).maxCinza));
+    fscanf(imagemP,"%d", &((*img).maxVal));
     strcpy((*img).tipo, tipo); 
 
     
@@ -122,7 +122,7 @@ void imprimirImagem(tImagemPGM *imagemTratada, char *saida){
 
     fprintf(imageout,"%s\n",imagemTratada->tipo);
     fprintf(imageout,"%d %d\n",  imagemTratada->colunas,imagemTratada->linhas); 
-    fprintf(imageout,"%d\n", imagemTratada->maxCinza);
+    fprintf(imageout,"%d\n", imagemTratada->maxVal);
 
 //--- CHANGED ------ Start
     if (strcmp(imagemTratada->tipo, "P2") == 0){

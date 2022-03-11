@@ -11,7 +11,7 @@ int main(int argc, char **argv){
     tratamentoEntrada(argc,argv,comando);
     tImagemPGM *imagem = malloc(sizeof(tImagemPGM));
     retornarImagemDeEntrada(comando->entrada,imagem); 
-    int limiar = comando->limiar * imagem->maxCinza; 
+    int limiar = comando->limiar * imagem->maxVal; 
     filtroLimiar(limiar,imagem);
     imprimirImagem(imagem,comando->saida);
     free(imagem); 
