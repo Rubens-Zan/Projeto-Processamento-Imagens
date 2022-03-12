@@ -1,12 +1,12 @@
 # Makefile compilacao programa processamento de imagens
-# Para efetuar a compilação digite make all
+# Para efetuar a compilação digite make all ou make
 # Para remover os arquivos temporários digite make clean
 # Para remover os arquivos temporários e o arquivo executável digite make purge
 
 CFLAGS = -Wall -lm
 
 MODULOS = tratarEntrada \
-	tratarImagens \
+	bibliotecaGeral \
 	acessoImagens
 
 

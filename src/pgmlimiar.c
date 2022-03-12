@@ -1,10 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tratarEntrada.h"
-#include "tratarImagens.h"
 #include "acessoImagens.h"
 #include "estruturas.h"
 #include <math.h>
+
+void filtroLimiar(int limiar, tImagemPGM *imagem){
+    int linhaAtual,colunaAtual; 
+    for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
+        for (colunaAtual=0; colunaAtual < imagem->colunas;colunaAtual++){
+            if (imagem->matrizPixeis[linhaAtual][colunaAtual] > limiar){
+                imagem->matrizPixeis[linhaAtual][colunaAtual]=imagem->maxVal;
+            } else{
+                imagem->matrizPixeis[linhaAtual][colunaAtual]=0;
+            }
+        } 
+    }
+}
 
 int main(int argc, char **argv){
     tComando *comando = (tComando *)malloc(sizeof(tComando));

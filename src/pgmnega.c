@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tratarEntrada.h"
-#include "tratarImagens.h"
 #include "acessoImagens.h"
 #include "estruturas.h"
+
+void filtroNegativo(tImagemPGM *imagem){
+    int linhaAtual,colunaAtual; 
+    for (linhaAtual=0; linhaAtual < imagem->linhas; linhaAtual++){
+        for (colunaAtual=0; colunaAtual<imagem->colunas;colunaAtual++){
+            imagem->matrizPixeis[linhaAtual][colunaAtual]=255-imagem->matrizPixeis[linhaAtual][colunaAtual]; 
+        } 
+    } 
+}
 
 
 int main(int argc, char **argv){
