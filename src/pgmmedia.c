@@ -46,5 +46,6 @@ int main(int argc, char **argv){
     filtroMedia(imagem);
     imprimirImagem(imagem,comando->saida);
     free(imagem); 
+    free(comando); 
     return 0;
 }

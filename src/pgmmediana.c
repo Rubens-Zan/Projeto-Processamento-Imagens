@@ -63,5 +63,6 @@ int main(int argc, char **argv){
     filtroMediana(imagem, comando->mascara); 
     imprimirImagem(imagem,comando->saida);
     free(imagem); 
+    free(comando);
     return 0;
 }
